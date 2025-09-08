@@ -1,8 +1,8 @@
     import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
-import {mockStockPrices, mockHistoricalData, mockCompanyInfo, mockUserPortfolios} from "./mock_data.js";
-
+import {mockStockPrices, mockHistoricalData, mockCompanyInfo, mockUserPortfolios} from "./Mock_Data.js";
+import cors from "cors"
 // Define schema using GraphQL SDL
 const schema = buildSchema(`
  type StockPrice {
@@ -47,7 +47,6 @@ const schema = buildSchema(`
    userPortfolio(userId: String!): UserPortfolio
  }
 `);
-
 // Resolver functions
 const root = {
  stockPrice: ({ symbol }) => mockStockPrices[symbol],
@@ -58,7 +57,7 @@ const root = {
 
 // Create an express server
 const app = express();
-
+app.use(cors())
 // Define the GraphQL endpoint
 app.use('/graphql', graphqlHTTP({
  schema: schema,

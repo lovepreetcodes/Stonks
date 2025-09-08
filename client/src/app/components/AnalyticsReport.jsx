@@ -1,11 +1,13 @@
 
 "use client"
-import { useState } from 'react';
-import { ApolloProvider, ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { useState ,useEffect} from 'react';
+import { ApolloProvider,HttpLink, ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
 const client = new ApolloClient({
- uri: 'http://localhost:4001/graphql',
- cache: new InMemoryCache()
+  link: new HttpLink({
+    uri: 'http://localhost:4001/graphql', // ✅ GraphQL server
+  }),
+  cache: new InMemoryCache(),
 });
 
 // Define GraphQL queries
@@ -85,8 +87,8 @@ const AnalyticsReport = () => {
      console.error('Error:', error);
    }
  };
+ fetchData()
 
- fetchData();
 
  return (
    <div>
