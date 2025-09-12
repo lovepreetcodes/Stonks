@@ -9,13 +9,14 @@ const Reports
        const [marketData, setMarketData] = useState([]);
 
        const getMarketData = async () => {
-           const res = await axios.get('http://localhost:4000/getDataMonthlyInterval');
+           const res = await axios.get('http://localhost:4000/getDataFromUpstox',{params:{Symbol:stockSymbol}});
            console.log('Data received : ', res);
            setMarketData(res.data.candles);
        }
 
        return (
            <div>
+           <h2>{marketData}</h2>
                <div className="flex flex-col items-center justify-center h-screen">
                    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-80">
                        <h2 className="text-2xl font-semibold mb-4">Stonks Reports</h2>

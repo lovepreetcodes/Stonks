@@ -1,15 +1,12 @@
 import express from 'express';
 import dotenv from "dotenv"
 import UpstoxClient from "upstox-js-sdk";
-
+import cors from 'cors'
 
 dotenv.config();
 const app = express();
 const port = 4000;
-
-const authurlfortoken_sample = `https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=<clientid>&redirect_uri=https%3A%2F%2Flocalhost%3A4000`;
-
-
+app.use(cors())
 app.get('/', async (req, res) => {
    res.json({ message: "HHLD Stock Broker Order Executioner Service" });
 });
@@ -29,12 +26,13 @@ const loginToUpstox = () => {
        redirectUri: process.env.REDIRECT_URL,
        grantType: "authorization_code",
    };
+   console.log("api hit!")
    apiInstance.token(apiVersion, opts, (error, data, response) => {
        if (error) {
            console.log("Error occurred: ", error.message);
        } else {
-           console.log('Access Token - ', data["accessToken"]);
-           console.log("API called successfully. Returned data: " + JSON.stringify(data)); //this will have auth token. copy that
+              console.log("Access Token:", data.access_token);
+      console.log("Refresh Token:", data.refresh_token);
        }
    });
 };
@@ -57,7 +55,7 @@ const getMarketQuoteOHLC = (symbol, callback) => {
    OAUTH2.accessToken = process.env.ACCESS_TOKEN;
    let apiInstance = new UpstoxClient.MarketQuoteApi();
    let apiVersion = "2.0";
-   //let symbol = "NSE_EQ|INE669E01016";
+
    let interval = "1d";
    apiInstance.getMarketQuoteOHLC(
        symbol,
